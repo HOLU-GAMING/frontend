@@ -155,8 +155,8 @@
               </v-col>
             </v-card>
             <span class="text-caption white--text text--darken-1">
-              Se enviará un link de confirmación a los telefonos y correos
-              ingresados
+              Enviaremos un correo para confirmar la participación de cada
+              participante
             </span>
           </v-card-text>
         </v-window-item>
@@ -186,37 +186,11 @@
                         >
                           <v-avatar size="100">
                             <v-img
-                              v-if="!players[i].imageUrl"
                               src="@/assets/user.jpg"
                               height="150px"
                               width="150px"
                             />
-                            <v-img
-                              v-else
-                              :src="players[i].imageUrl"
-                              height="150px"
-                              width="150px"
-                            />
                           </v-avatar>
-                          <v-btn
-                            color="pink"
-                            dark
-                            small
-                            absolute
-                            bottom
-                            right
-                            fab
-                            @click="(indexItem = i), $refs.image[i].click()"
-                          >
-                            <input
-                              type="file"
-                              style="display: none"
-                              ref="image"
-                              accept="image/*"
-                              @change="onFilePicked"
-                            />
-                            <v-icon>mdi-plus</v-icon>
-                          </v-btn>
                         </v-card-title>
                       </v-col>
                     </v-row>
@@ -234,9 +208,6 @@
                 </v-col>
               </v-row>
             </v-card>
-            <h3 class="text-h6 font-weight-light mb-2">
-              La imagen de cada jugador es opcional
-            </h3>
             <span class="text-caption white--text text--darken-1">
               Recuerda que solo puede ver {{ cantCaptain }} Capitan,
               {{ cantPlayers }} Jugadores y
@@ -290,7 +261,7 @@
               </v-col>
             </v-row>
             <h3 class="text-h6 font-weight-light mb-2">
-              Ingresa un logo que identifique a tu equipo (opcional)
+              Ingresa un logo que identifique a tu equipo
             </h3>
             <span class="text-caption white--text text--darken-1">
               Bienvenido a HoluGaming
@@ -360,7 +331,7 @@ export default {
     ],
     itemsRol: ["Capitan", "Jugador", "Sustituto"],
   }),
-  props: ["visible"],
+  props: ["visible", "nameTeam"],
   computed: {
     getEndDate() {
       return this.dateNow.toISOString().slice(0, 10);
@@ -515,40 +486,17 @@ export default {
         this.imageUrl = "";
       }
     },
-    onFilePicked(e) {
-      const files = e.target.files;
-      if (files[0] !== undefined) {
-        this.players[this.indexItem].imageName = files[0].name;
-        if (this.players[this.indexItem].imageName.lastIndexOf(".") <= 0) {
-          return;
-        }
-        const fr = new FileReader();
-        fr.readAsDataURL(files[0]);
-        fr.addEventListener("load", () => {
-          this.players[this.indexItem].imageUrl = fr.result;
-          this.players[this.indexItem].imageFile = files[0];
-        });
-      } else {
-        this.players[this.indexItem].imageName = "";
-        this.players[this.indexItem].imageFile = "";
-        this.players[this.indexItem].imageUrl = "";
-      }
-    },
     addPlayer() {
       this.players.push({
         first_name: "Moises",
         last_name: "Ochoa",
-        nick_name: "moses22"+this.players.length,
-        dni: "831292215LP"+this.players.length,
-        phone_number: "7322735766"+this.players.length,
-        email: "moi22sic.mo@gmail.com"+this.players.length,
+        nick_name: "mos123es22" + this.players.length,
+        dni: "831291232215LP" + this.players.length,
+        phone_number: "7321232735766" + this.players.length,
+        email: "moi22123sic.mo@gmail.com" + this.players.length,
         date_birth: "2022-05-04",
         menu: false,
-        activePicker: null,
         rol: "",
-        imageName: "",
-        imageUrl: "",
-        imageFile: "",
       });
       if (this.players.length > 1) {
         setTimeout(() => {
@@ -577,7 +525,20 @@ export default {
         });
     },
     suscribe() {
-      console.log(this.players)
+      let formData = new FormData();
+      formData.append("archivo", this.imageFile);
+      formData.append("name_team", this.nameTeam);
+      formData.append("players", JSON.stringify(this.players));
+      this.$http
+        .post("form/create/team/players", formData)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          this.stateLoading = false;
+          this.msgError = err.response.data.msg;
+          this.addErrorNotification();
+        });
     },
   },
 };

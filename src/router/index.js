@@ -5,7 +5,7 @@ import home from '../views/home.vue'
 Vue.use(VueRouter)
 
 const routes = [{
-        path: '/',
+        path: '/inscripciones',
         name: 'registro',
         component: home
     },

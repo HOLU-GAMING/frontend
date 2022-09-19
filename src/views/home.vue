@@ -35,11 +35,11 @@
           ></v-progress-circular>
         </v-form>
       </v-col>
-      <!-- <v-col cols="12" md="6">
-        <v-card class="pa-2" outlined tile> .col-6 .col-md-4 </v-card>
-      </v-col> -->
     </v-row>
-    <DialogCreate :visible="dialog" @close="dialog = false" />
+    <DialogCreate 
+    :visible="dialog"
+    :data="nameTeam"
+     @close="dialog = false" />
   </v-layout>
 </template>
 
@@ -82,8 +82,9 @@ export default {
     },
     validateTeam(name) {
       this.$http
-        .get("api/teams/name/" + name)
+        .get("teams/name/" + name)
         .then(() => {
+          console.log('errr')
           this.msgError = "El equipo " + name + " ya se encuentra registrado";
           this.statusLoading = false;
           this.addErrorNotification();
