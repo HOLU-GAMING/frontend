@@ -11,7 +11,7 @@ import axios from 'axios'
 Vue.use(Toast);
 
 const HTTP = axios.create({
-    baseURL: 'http://localhost:8080/api/'
+    baseURL: 'https://holu.pro/api/'
   })
 
 

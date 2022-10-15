@@ -488,13 +488,13 @@ export default {
     },
     addPlayer() {
       this.players.push({
-        first_name: "Moises",
-        last_name: "Ochoa",
-        nick_name: "mos123es22" + this.players.length,
-        dni: "831291232215LP" + this.players.length,
-        phone_number: "7321232735766" + this.players.length,
-        email: "moi22123sic.mo@gmail.com" + this.players.length,
-        date_birth: "2022-05-04",
+        first_name: "",
+        last_name: "",
+        nick_name: "",
+        dni: "",
+        phone_number: "",
+        email: "",
+        date_birth: "",
         menu: false,
         rol: "",
       });
