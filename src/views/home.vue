@@ -1,98 +1,91 @@
 <template>
-  <v-layout justify-center>
-    <v-row no-gutters align="center" justify="center">
-      <v-col cols="12" md="6">
-        <v-form
-          class="pa-md-12 mx-lg-auto"
-          ref="form"
-          v-model="valid"
-          lazy-validation
-        >
-          <h1 class="pb-8 font-weight-bold">REGISTRO DE EQUIPOS</h1>
-          <v-text-field
-            prepend-inner-icon="mdi-account-group-outline"
-            v-model="nameTeam"
-            :rules="nameRules"
-            required
-            placeholder="Nombre del equipo"
-          ></v-text-field>
-
-          <v-btn
-            v-if="!statusLoading"
-            color="success"
-            block
-            dark
-            tile
-            class="pa-6 font-weight-bold"
-            elevation="0"
-            @click="validate"
-            >CONTINUAR</v-btn
-          >
-          <v-progress-circular
-            v-else
-            indeterminate
-            color="success"
-          ></v-progress-circular>
-        </v-form>
-      </v-col>
-    </v-row>
-    <DialogCreate 
-    :visible="dialog"
-    :data="nameTeam"
-     @close="dialog = false" />
-  </v-layout>
+  <v-app>
+    <navigation :color="color" :flat="flat" />
+    <home />
+    <v-main class="pt-0">
+      <about />
+      <!-- <download /> -->
+      <pricing />
+      <contact/>
+    </v-main>
+    <v-scale-transition>
+      <v-btn
+        fab
+        v-show="fab"
+        v-scroll="onScroll"
+        dark
+        fixed
+        bottom
+        right
+        color="background"
+        @click="toTop"
+      >
+        <v-icon>mdi-arrow-up</v-icon>
+      </v-btn>
+    </v-scale-transition>
+    <foote />
+  </v-app>
 </template>
-
-<script>
-import DialogCreate from "./dialog_create_team.vue";
+  
+  <style scoped>
+.v-main {
+  background-image: url("../assets/img/bgMain.png");
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+}
+</style>
+  
+  <script>
+import navigation from "../components/Navigation";
+import foote from "../components/Footer";
+import home from "../components/HomeSection";
+import about from "../components/AboutSection";
+// import download from "../components/DownloadSection";
+import pricing from "../components/PricingSection";
+import contact from "../components/ContactSection";
 export default {
+  name: "App",
   components: {
-    DialogCreate,
+    navigation,
+    foote,
+    home,
+    about,
+    // download,
+    pricing,
+    contact
   },
   data: () => ({
-    statusLoading: false,
-    msgError: "",
-    position: "top-right",
-    dialog: false,
-    nameTeam: "",
-    valid: true,
-    nameRules: [(v) => !!v || "El nombre es requerido"],
+    fab: null,
+    color: "",
+    flat: null,
   }),
-  computed: {},
-  methods: {
-    addErrorNotification() {
-      this.$toast.error(this.msgError, {
-        position: this.position,
-        timeout: 6000,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        draggablePercent: 0.6,
-        showCloseButtonOnHover: false,
-        hideProgressBar: true,
-        closeButton: "button",
-        icon: true,
-      });
-    },
-    validate() {
-      if (this.$refs.form.validate()) {
-        this.statusLoading = true;
-        this.validateTeam(this.nameTeam.toUpperCase());
+  created() {
+    const top = window.pageYOffset || 0;
+    if (top <= 60) {
+      this.color = "transparent";
+      this.flat = true;
+    }
+  },
+  watch: {
+    fab(value) {
+      if (value) {
+        this.color = "background";
+        this.flat = false;
+      } else {
+        this.color = "transparent";
+        this.flat = true;
       }
     },
-    validateTeam(name) {
-      this.$http
-        .get("teams/name/" + name)
-        .then(() => {
-          console.log('errr')
-          this.msgError = "El equipo " + name + " ya se encuentra registrado";
-          this.statusLoading = false;
-          this.addErrorNotification();
-        })
-        .catch(() => {
-          this.statusLoading = false;
-          this.dialog = true;
-        });
+  },
+  methods: {
+    onScroll(e) {
+      if (typeof window === "undefined") return;
+      const top = window.pageYOffset || e.target.scrollTop || 0;
+      this.fab = top > 60;
+    },
+    toTop() {
+      this.$vuetify.goTo(0);
     },
   },
 };

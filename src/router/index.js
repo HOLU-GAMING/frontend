@@ -1,14 +1,29 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+
 import home from '../views/home.vue'
+
+
+import tournament_home from '../views/tournament/tournament_home.vue'
 
 Vue.use(VueRouter)
 
-const routes = [{
+const routes = [
+    {
         path: '/',
-        name: 'registro',
+        name: 'home',
         component: home
     },
+    {
+        path: "/registro/:id",
+        name: "registro",
+        component: tournament_home,
+        props: true,
+        beforeRouteUpdate(to, from, next) {
+          this.id = to.params.id;
+          next();
+        },
+      },
 ]
 
 const router = new VueRouter({

@@ -28,7 +28,7 @@
           <v-btn
             :disabled="
               players.length ===
-              cantCaptain + cantPlayers + cantPlayersReplacements
+              cantCaptain + (this.tournament.cant_players_team - 1 ) + this.tournament.cant_replacements
             "
             class="mx-2"
             dark
@@ -210,8 +210,8 @@
             </v-card>
             <span class="text-caption white--text text--darken-1">
               Recuerda que solo puede ver {{ cantCaptain }} Capitan,
-              {{ cantPlayers }} Jugadores y
-              {{ cantPlayersReplacements }} Sustituto
+              {{ (this.tournament.cant_players_team - 1 ) }} Jugadores y
+              {{ this.tournament.cant_replacements }} Sustituto
             </span>
           </v-card-text>
         </v-window-item>
@@ -310,8 +310,6 @@ export default {
     imageUrl: "",
     imageFile: "",
 
-    cantPlayersReplacements: 2,
-    cantPlayers: 4,
     cantCaptain: 1,
 
     step: 1,
@@ -331,7 +329,7 @@ export default {
     ],
     itemsRol: ["Capitan", "Jugador", "Sustituto"],
   }),
-  props: ["visible", "nameTeam"],
+  props: ["visible", "nameTeam", "tournament"],
   computed: {
     getEndDate() {
       return this.dateNow.toISOString().slice(0, 10);
@@ -349,8 +347,8 @@ export default {
         if (
           this.players.length !=
             this.cantCaptain +
-              this.cantPlayers +
-              this.cantPlayersReplacements ||
+            (this.tournament.cant_players_team - 1 ) +
+            this.tournament.cant_replacements ||
           !this.stateBtnStep1
         ) {
           return true;
@@ -419,8 +417,8 @@ export default {
           countReplacements++;
         }
         if (countCaptain == this.cantCaptain) {
-          if (countPlayers == this.cantPlayers) {
-            if (countReplacements == this.cantPlayersReplacements) {
+          if (countPlayers == (this.tournament.cant_players_team - 1 )) {
+            if (countReplacements == this.tournament.cant_replacements) {
               stateBtn = true;
             }
           }
@@ -453,6 +451,20 @@ export default {
     this.addPlayer();
   },
   methods: {
+    successNotification() {
+      this.$toast.success(this.msgError, {
+        position: this.position,
+        timeout: 6000,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        draggablePercent: 0.6,
+        showCloseButtonOnHover: false,
+        hideProgressBar: true,
+        closeButton: "button",
+        icon: true,
+      });
+    },
     addErrorNotification() {
       this.$toast.error(this.msgError, {
         position: this.position,
@@ -533,6 +545,10 @@ export default {
         .post("form/create/team/players", formData)
         .then((res) => {
           console.log(res);
+          this.stateLoading = false;
+          this.msgError = `Bienvenidos ${this.nameTeam}`;
+          this.successNotification();
+          this.show = false;
         })
         .catch((err) => {
           this.stateLoading = false;
