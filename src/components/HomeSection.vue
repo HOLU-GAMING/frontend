@@ -12,7 +12,7 @@
             <v-col cols="10">
               <v-row align="center" justify="center">
                 <v-col cols="12" md="6" xl="8">
-                  <h1 class="display-2 font-weight-bold mb-4">Holu Gaming</h1>
+                  <h1 class="display-2 font-weight-bold mb-4">Holu eSports</h1>
                   <h1 class="font-weight-light">
                     Diviértete y gana dinero jugando
                   </h1>

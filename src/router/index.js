@@ -15,7 +15,7 @@ const routes = [
         component: home
     },
     {
-        path: "/registro/:id",
+        path: "/:id",
         name: "registro",
         component: tournament_home,
         props: true,

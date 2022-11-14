@@ -5,16 +5,16 @@
       app
       temporary
       dark
-      src="../assets/images/gaming.jpg"
+      src="../../assets/images/gaming.jpg"
     >
       <v-list>
         <v-list-item>
           <v-list-item-avatar>
-            <img src="../assets/images/holulogo.png" alt="Logo" />
+            <img src="../../assets/images/holulogo.png" alt="Logo" />
           </v-list-item-avatar>
           <v-list-item-content>
-            <v-list-item-title class="title">Holu</v-list-item-title>
-            <v-list-item-subtitle>eSports</v-list-item-subtitle>
+            <v-list-item-title class="title">HOLU</v-list-item-title>
+            <v-list-item-subtitle>GAMING</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -37,22 +37,14 @@
             }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <auth/>
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar
-      app
-      :color="color"
-      :flat="flat"
-      dark
-      class="px-15 pt-2 pb-2"
-      :class="{ expand: flat }"
-    >
+    <v-app-bar absolute elevate-on-scroll :color="color" dark>
       <v-toolbar-title>
         <v-img
-          src="../assets/images/holulogo.png"
-          max-width="180px"
+          src="../../assets/images/holulogo.png"
+          max-width="100px"
           @click="$vuetify.goTo('#hero')"
         />
       </v-toolbar-title>
@@ -63,36 +55,22 @@
         v-if="isXs"
       />
       <div v-else>
-        <!-- <v-btn text @click="$vuetify.goTo('#hero')">
-          <span class="mr-2">Home</span>
-        </v-btn> -->
-        <v-btn text @click="$vuetify.goTo('#features')">
-          <span class="mr-2">Torneos</span>
+        <v-btn rounded outlined text @click="dialogstate = true">
+          <span class="mr-2">Iniciar Sesión</span>
         </v-btn>
-        <!-- <v-btn text @click="$vuetify.goTo('#download')">
-          <span class="mr-2">Descarga</span>
-        </v-btn> -->
-        <v-btn text @click="$vuetify.goTo('#pricing')">
-          <span class="mr-2">Gana</span>
-        </v-btn>
-        <v-btn text @click="$vuetify.goTo('#contact')">
-          <span class="mr-2">Contactanos</span>
-        </v-btn>
-        <auth/>
       </div>
       <dialogComponent :visible="dialogstate" @close="dialogstate = false" />
     </v-app-bar>
   </div>
 </template>
-
-<script>
+  
+  <script>
 import { mapActions, mapGetters } from "vuex";
-import dialogComponent from "../views/session/dialog.vue";
-import auth from "./buttonAuth.vue";
+import dialogComponent from "../session/dialog.vue";
+
 export default {
   components: {
     dialogComponent,
-    auth
   },
   data: () => ({
     verificationId: "",
@@ -100,18 +78,13 @@ export default {
     valid: true,
     indexLogin: 0,
     isConnected: false,
-    FB: undefined,
-    listGender: ["masculino", "femenino"],
     tab: null,
-    itemss: ["Estudiante", "Administrador"],
     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
     dialogstate: false,
     drawer: null,
     isXs: false,
     items: [
-      // ["mdi-home-outline", "Home", "#hero"],
       ["mdi-information-outline", "TORNEOS", "#features"],
-      // ["mdi-download-box-outline", "Download", "#download"],
       ["mdi-currency-usd", "GANA", "#pricing"],
       ["mdi-email-outline", "CONTACTANOS", "#contact"],
     ],
@@ -175,14 +148,3 @@ export default {
   },
 };
 </script>
-
-<!-- <style scoped>
-.v-toolbar {
-  transition: 0.6s;
-}
-
-.expand {
-  height: 80px !important;
-  padding-top: 10px;
-}
-</style> -->
